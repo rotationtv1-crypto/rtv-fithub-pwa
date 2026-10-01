@@ -1,0 +1,47 @@
+[
+  {
+    "id": "100-rep-challenge",
+    "title": "100-Rep Challenge",
+    "category": "Full body",
+    "duration": "20 min",
+    "description": "Five bodyweight moves. Twenty reps each. Go at your own pace.",
+    "steps": ["20 squats", "20 incline or floor push-ups", "20 reverse lunges (10 per side)", "20 glute bridges", "20 mountain climbers (10 per side)"],
+    "coins": 10
+  },
+  {
+    "id": "chest-and-arms",
+    "title": "Chest & Arms Push-Up Circuit",
+    "category": "Upper body",
+    "duration": "15 min",
+    "description": "Three rounds with 45 seconds of rest between rounds.",
+    "steps": ["8 standard push-ups", "8 wide push-ups", "8 close-grip push-ups", "20-second plank"],
+    "coins": 10
+  },
+  {
+    "id": "shoulders-and-back",
+    "title": "Shoulders & Back",
+    "category": "Strength",
+    "duration": "18 min",
+    "description": "Three controlled rounds. Focus on posture and range of motion.",
+    "steps": ["10 pike push-ups", "12 prone Y-T-W raises", "12 supermans", "20-second reverse plank"],
+    "coins": 10
+  },
+  {
+    "id": "mobility-flow",
+    "title": "5-Minute Mobility Flow",
+    "category": "Recovery",
+    "duration": "5 min",
+    "description": "A quick reset for stiff joints. Breathe steadily throughout.",
+    "steps": ["1 minute cat-cow", "1 minute thoracic rotations", "1 minute hip circles", "1 minute deep squat hold", "1 minute shoulder rolls"],
+    "coins": 5
+  },
+  {
+    "id": "90-day-plan",
+    "title": "90-Day Bodyweight Plan",
+    "category": "Program",
+    "duration": "90 days",
+    "description": "Build consistency with a repeatable weekly structure. Start easy and progress gradually.",
+    "steps": ["Days 1–30: alternate full-body strength and mobility, 3 days per week", "Days 31–60: add a fourth training day and one extra round", "Days 61–90: increase reps or tempo while keeping recovery days", "Rest at least one day between hard sessions"],
+    "coins": 10
+  }
+]
