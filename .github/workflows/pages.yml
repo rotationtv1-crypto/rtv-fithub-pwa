@@ -1,27 +1,58 @@
-name: Import verified FitHub source
+name: Deploy FitHub to GitHub Pages
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
 jobs:
   import:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Import two verified source snapshots
+      - name: Import verified source if absent
         shell: bash
         run: |
           set -euo pipefail
+          if [ -f index.html ]; then echo 'Source already imported'; exit 0; fi
           git config user.name 'FitHub Delivery Bot'
           git config user.email 'actions@users.noreply.github.com'
           curl --fail --location --silent --show-error 'https://customer-assets-jai6qajn.emergentagent.net/wingman/50783da3-9078-467e-b602-a492ec994019/attachments/becc29da2117498ebef050c0931fda87_first-commit.tar.gz' -o /tmp/fithub-one.tar.gz
           echo '75355b9ab6de591a97528077a3781cab98eac6422d8207f7abc55e371d79b795  /tmp/fithub-one.tar.gz' | sha256sum -c -
-          tar -xzf /tmp/fithub-one.tar.gz -C .
+          tar -xzf /tmp/fithub-one.tar.gz -C . --exclude=.github/workflows/pages.yml
           git add -A
           git commit -m 'Build offline workout PWA and Pages deployment'
           curl --fail --location --silent --show-error 'https://customer-assets-jai6qajn.emergentagent.net/wingman/50783da3-9078-467e-b602-a492ec994019/attachments/88a010ac2c704f33ad61ba263b6e7daa_second-commit.tar.gz' -o /tmp/fithub-two.tar.gz
           echo 'a23d414302813e44e0fef0e0264b721cdbee5ab8f62315632e4ed5be0c774bfb  /tmp/fithub-two.tar.gz' | sha256sum -c -
-          tar -xzf /tmp/fithub-two.tar.gz -C .
+          tar -xzf /tmp/fithub-two.tar.gz -C . --exclude=.github/workflows/pages.yml
           git add -A
           git commit -m 'Add optional Express wallet and PayPal demo API'
           git push origin HEAD:main
+  deploy:
+    needs: import
+    if: always() && (needs.import.result == 'success' || needs.import.result == 'skipped')
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - name: Prepare static site
+        run: |
+          mkdir _site
+          cp index.html app.js config.js workouts.json manifest.json service-worker.js .nojekyll _site/
+          cp -R icons _site/icons
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
